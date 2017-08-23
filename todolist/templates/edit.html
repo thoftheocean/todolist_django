@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background-color: aquamarine;
+        }
+        div{
+            height: 600px;
+            width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 style="margin: 0 auto;width: 400px;" >这是todolis的编辑页面</h1>
+        <form method="post">
+            {% csrf_token %}
+            <textarea cols="100" rows="10" name="event">{{ todolist.event }}</textarea></br>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+
+</body>
+</html>

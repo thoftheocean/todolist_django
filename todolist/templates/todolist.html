@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>todolist</title>
+    <style type="text/css">
+        body{
+            background-color: aquamarine;
+        }
+        input{
+            background-color: deepskyblue;
+        }
+        textarea{
+            background-color: ghostwhite;
+        }
+       .todolists{
+            min-width:300px ;
+            width: auto;
+            max-width: 1000px;
+            margin:0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>ToDoList</h1>
+    <div class="todolists" >
+         <form action="{% url 'todolist' %}" method="post">
+         {% csrf_token %}
+        <textarea cols="100" rows="2" name="event"></textarea>
+        </br>
+        <input type="submit" value="添加">
+        </form>
+    </div>
+
+    <div class="todolists">
+        </br>
+        </br>
+        {% load time_filter %}
+        {% for todolist  in todolists %}
+            <textarea id="{{ todolist.id }}" rows="2" cols="100" readonly="readonly" >{{ todolist.event }}</textarea>
+            <textarea rows="2" cols="10" readonly="readonly">{{ todolist.datetime_now | time_before }}</textarea>
+            </br>
+            <div class="button_event">
+                <input type="button" value="编辑" onclick="edit_event({{ todolist.id }})">
+                <input type="button" value="保存" onclick="save_event({{ todolist.id }})">
+                <input type="button" value="删除" onclick="delete_event({{ todolist.id }})">
+                <input type="button" value="{{ todolist.status }}" style="background-color: orange;color: red" onclick="event_status(id={{ todolist.id}}, '{{ todolist.status}}')">
+
+    {#                    <input id='check' type="checkbox" value="1" onclick="finish_event({{ event }},{{ event[0] }})">#}
+            </div>
+            <script type="text/javascript">
+                        function edit_event(id){
+                            document.getElementById(id).readOnly=false;
+                        }
+
+                        function delete_event(id){
+                             window.location.href="/todolist/?id="+ id+"&operate=delete";
+                        }
+
+                        function save_event(id){
+                            save_event=document.getElementById(id)
+                            b=save_event.value
+                            window.location.href="/todolist/?id="+ id+"&operate=save&value="+b;
+                        }
+
+                        function event_status(id,status) {
+                            if(status=='undo'){
+                                status='done'
+                            }
+                            else {
+                                status='undo'
+                            }
+                            window.location.href="/todolist/?id="+ id+"&status=" + status ;
+                        }
+            </script>
+        {% endfor %}
+    </div>
+</body>
+</html>
